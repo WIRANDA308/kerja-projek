@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/edit.css">
+</head>
+<body>
+    <div class="container-feedback" id="feedback">
+        <h1>edit</h1>
+        <div class="feedback">
+                <form>
+                <div class="container-name">
+                  <label for="name">Nama</label>
+                 <input type="text" name="name" id="name">
+                </div>
+                 <div class="container-email">
+                  <label for="email">Email</label>
+                 <input type="text" name="email" id="email">
+                </div>
+                <div class="container-saran">
+                  <label for="textarea">Saran</label>
+                  <textarea name="textarea" id="saran"></textarea>
+                </div>
+                <input type="button" value="Send this" id="btn">
+                </form>
+                <div class="container-img">
+                  <img src="send.png" alt="" srcset="">
+                </div>
+        </div>
+      </div> 
+
+      <script>
+        let user = document.querySelector("#name");
+        let email = document.querySelector("#email");
+        let coment = document.querySelector("#saran");
+        const btn = document.querySelector("#btn");
+  
+
+
+
+
+
+
+
+
+    btn.addEventListener("click", () => {
+    if (user.value == "" && email.value == "" &&  coment.value == "" || user.value && email.value == "" && coment.value == "" || user.value && email.value && coment.value == "" || user.value == "" && email.value  && coment.value == "" || user.value == "" && email.value == "" && coment.value || user.value == "" && email.value && coment.value || user.value && email.value && coment.value == "") {
+        alert("the data you sent is empty or there is one that is empty")
+    } else {    
+        const Number = "<%=number%>";
+         const User = user.value;
+         const Email = email.value;
+         const Coment = coment.value;
+        
+         const option = {
+         method: 'POST',
+         headers: {
+            'Content-Type': 'application/json',
+         },
+          body: JSON.stringify({ 
+            user: User,
+            email: Email,
+            coment: Coment,
+            time: getTime(),
+            number: Number,
+          }),
+        }
+
+        fetch('http://localhost:3000/edit', option)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Response dari server:', data);
+            user.value = "";
+            email.value = "";
+            coment.value = "";
+            location.href = "/admin";
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });    
+    }
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        function getTime() {
+        var waktuSekarangUTC = new Date();
+        var zonaWaktuLokal = "Asia/Jakarta";
+        var waktuSekarangLokal = waktuSekarangUTC.toLocaleString('en-ID', { timeZone: zonaWaktuLokal });
+        var stringWaktuLokal = `${waktuSekarangLokal.substr(0, 10)} ${tambahkanNol(waktuSekarangLokal.substr(12))}`;
+        return stringWaktuLokal;
+      }
+
+      function tambahkanNol(angka) {
+        return angka < 10 ? "0" + angka : angka;
+      }
+ 
+
+      function randomNumber() {
+        return Math.ceil(Math.random() * 100);
+      }
+
+      </script>   
+</body>
+</html>

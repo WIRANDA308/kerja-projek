@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+     <style>
+        body {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+            height: 100vh;
+
+        }
+     </style>
+</head>
+<body>
+    <button type="button" class="btn btn-primary" onclick="location.href='/kerja-projek'">Log Out</button>
+    <table class="table table-dark" style="width: 90%;">
+        <thead>
+          <tr>
+            <th scope="col">No</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Massage</th>
+            <th scope="col">Time</th>
+            <th scope="col">Remove</th>
+            <th scope="col">Edit</th>
+          </tr>
+        </thead>
+        <tbody>
+
+         <% data.reverse().forEach((e,i) => { %>
+            <tr>
+                <th scope="row"><%= i + 1 %></th>
+                <td><%= e.user %></td>
+                <td><%= e.email %></td>
+                <td><%= e.coment%></td>
+                <td><%= e.time%></td>
+                <td><input type="button" value="Remove" style="border-radius: 20px; background-color: white; padding: 10px;" class="remove"  data-bs-toggle="modal" data-bs-target="#exampleModal"></td> 
+               <td><a href="edit/<%= e.number %>">EDIT</a></td>
+              </tr>
+         <% }) %>
+
+        </tbody>
+      </table>
+
+
+
+      
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Alert Box</h1>
+          <button type="button" class="btn-close x-button" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <!-- <div id="passwordHelpBlock" class="form-text">
+              Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.
+            </div>
+           -->
+           <h3>apakah Anda yakin ingin menghapus data ini</h3>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary delete">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+
+    <script>
+      let array = [];
+      let nama = [];
+      const xButton = document.querySelector(".x-button");
+      const closeButton = document.querySelector(".close");
+      const deleteButton = document.querySelector(".delete");
+      const remove = document.querySelectorAll(".remove");
+      const tr = document.querySelectorAll("tbody tr");
+
+      for (let i = 0; i < remove.length; i++) {
+         remove[i].addEventListener("click", async() => {
+             array.push(i);
+         })
+      }
+
+
+
+      deleteButton.addEventListener("click", async() => {
+          
+        const [index] = array;
+        const user = nama[index];
+         
+        
+     const res = await fetch("http://localhost:3000/delete",  {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+            user,
+         }),});
+
+
+         
+      if (res.ok)  {
+        console.log(res);
+        tr[index].remove();
+        closeButton.click()
+        array.shift();
+      } else {
+        array.shift();
+      }
+            
+      
+           
+      });
+
+      closeButton.addEventListener("click", () => {
+        console.log(array[0]);
+        array.shift();
+      })
+
+
+      xButton.addEventListener("click", () => {
+        console.log(array[0])
+        array.shift();
+      })
+
+
+       "<% data.forEach((e,i) => { %>"
+          nama.push("<%= e.user%>")
+       "<% }) %>"
+
+    
+
+    </script>
+
+</body>
+</html>
